@@ -6,8 +6,6 @@ public class MovementBehaviours : MonoBehaviour
 {
     private Rigidbody2D rb;
     private float speed = 10f;
-    private float moveSpeed = 10f;
-    private float ro = 2f;
     private float health = 100f;
     private Vector2 movement;
 

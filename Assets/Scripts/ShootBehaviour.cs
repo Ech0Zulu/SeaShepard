@@ -9,6 +9,7 @@ public class ShootBehaviour : MonoBehaviour
     private float curShootCD = 0f;
     private Vector2 mousePos;
     private Transform projectilSpawn;
+    private float projectileSpeed = 10f;
 
     [SerializeField]
     private GameObject projectilePrefab;
@@ -35,25 +36,38 @@ public class ShootBehaviour : MonoBehaviour
 
     private void Shoot()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && canShoot)
         {
-            if (canShoot)
+            canShoot = false;
+            projectilSpawn = transform.Find("Gun");
+
+            // Calculer la direction et l'angle du tir
+            Vector2 direction = (mousePos - (Vector2)projectilSpawn.position).normalized;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+            // Créer le projectile avec le bon angle de tir
+            GameObject projectile = Instantiate(projectilePrefab, (Vector2)projectilSpawn.position, Quaternion.Euler(0, 0, angle));
+
+            // Ignorer la collision avec le spawn
+            Collider2D spawnCollider = projectilSpawn.GetComponent<Collider2D>();
+            Collider2D projectileCollider = projectile.GetComponent<Collider2D>();
+            Collider2D playerCollider = GetComponent<Collider2D>();
+            if (spawnCollider != null && projectileCollider != null)
             {
-                canShoot = false;
-                // Calculer la direction du tir
-                Vector2 direction = ( mousePos - (Vector2)projectilSpawn.position).normalized;
-
-                // Calculer l'angle de rotation
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-                // Créer le projectile avec la bonne rotation
-                GameObject projectile = Instantiate(projectilePrefab, (Vector2)projectilSpawn.position, Quaternion.Euler(0, 0, angle));
-
-                // Ajouter une vitesse au projectile (si Rigidbody2D est attaché)
-                Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
-                Debug.Log("Fire !");
+                Physics2D.IgnoreCollision(spawnCollider, projectileCollider);
             }
-            else Debug.Log("Can't shoot now !");
+            if (playerCollider != null && projectileCollider != null)
+            {
+                Physics2D.IgnoreCollision(playerCollider, projectileCollider);
+            }
+
+            // Ajouter une vitesse au projectile (si Rigidbody2D est attaché)
+            Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.velocity = direction * projectileSpeed;
+            }
+            Debug.Log("Fire !");
         }
     }
 
