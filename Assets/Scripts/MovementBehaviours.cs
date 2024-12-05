@@ -6,8 +6,6 @@ public class MovementBehaviours : MonoBehaviour
 {
     private Rigidbody2D rb;
     private float speed = 10f;
-    private float ro = 2f;
-    private float health = 100f;
 
 
     // Start is called before the first frame update
@@ -19,22 +17,27 @@ public class MovementBehaviours : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Moves();
     }
 
     private void Moves()
     {
-        // Déplacement avant/arrière
-        float moveInput = Input.GetAxis("Vertical"); // Z/S ou Flèche Haut/Bas
-        Vector3 move = transform.forward * moveInput * speed * Time.deltaTime;
+        //Déplacemnts du joueur
+        Vector3 move = new Vector3(
+            Input.GetAxis("Horizontal") * speed * Time.deltaTime,
+            Input.GetAxis("Vertical") * speed * Time.deltaTime,
+            0
+        );
 
-        // Rotation gauche/droite
-        float turnInput = Input.GetAxis("Horizontal"); // Q/D ou Flèche Gauche/Droite
-        Quaternion turn = Quaternion.Euler(0, turnInput * rotationSpeed * Time.deltaTime, 0);
+        //Rotation du joueur
+        if (move != Vector3.zero)
+        {
+            float angle = Mathf.Atan2(move.y, move.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
 
         // Appliquer les mouvements
         transform.position += move;
-        transform.rotation *= turn;
 
     }
 }
