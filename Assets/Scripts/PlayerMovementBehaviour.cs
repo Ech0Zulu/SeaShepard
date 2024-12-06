@@ -11,6 +11,7 @@ public class MovementBehaviours : MonoBehaviour
     private Rigidbody2D rb;
     private float speed = 10f;
     private float health = 100f;
+    private float damage = 25f;
     private Vector2 movement;
 
     // Start is called before the first frame update
@@ -53,6 +54,15 @@ public class MovementBehaviours : MonoBehaviour
         {
             float angle = Mathf.Atan2(moveInput.y, moveInput.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
+    }
+
+    private void Hit()
+    {
+        health -= damage;
+        if(health <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 }
