@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class EnemyMovementBehaviours : MonoBehaviour
 {
+    public enum State
+    {
+        Waiting,
+        Idle,
+        Chasing,
+        Shooting
+    }
 
     private float rayRange = 2.3f;
     public bool isTouchingWall = false;
@@ -19,6 +26,17 @@ public class EnemyMovementBehaviours : MonoBehaviour
     private float projectileSpeed = 15f;
     private float projectileDamage = 20f;
 
+    private State currentState = State.Waiting;
+
+    private Transform player; // Référence au joueur (sera assignée dynamiquement)
+    private float detectionRange = 5f; // Distance de détection du joueur
+    private float shootingRange = 2f; // Portée pour tirer
+    private float changeDirectionTime = 2f; // Temps avant de changer de direction en idle
+
+    private float stateTimer = 0f; // Timer pour gérer les transitions d'état
+    private Vector2 moveDirection; // Direction actuelle du bateau
+    private float directionChangeTimer = 0f; // Timer pour changer la direction en idle
+
     [SerializeField]
     private GameObject projectilePrefab;
 
@@ -27,6 +45,8 @@ public class EnemyMovementBehaviours : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        
     }
 
     // Update is called once per frame
@@ -35,11 +55,22 @@ public class EnemyMovementBehaviours : MonoBehaviour
         IsTouchingWall();
         UpdateCD();
 
-        // Permet de faire bouger l'ennemi
-        Moves(1, 1);
-
-        // Permet de faire tirer l'ennemi
-        Shoot();
+        // Gestion des états
+        switch (currentState)
+        {
+            case State.Waiting:
+                HandleWaiting();
+                break;
+            case State.Idle:
+                HandleIdle();
+                break;
+            case State.Chasing:
+                HandleChasing();
+                break;
+            case State.Shooting:
+                HandleShooting();
+                break;
+        }
     }
 
     private void IsTouchingWall()
@@ -48,7 +79,7 @@ public class EnemyMovementBehaviours : MonoBehaviour
         isTouchingWall = (hit.collider != null);
     }   
 
-    private void Moves(int horizontal, int vertical)
+    private void Moves(float horizontal, float vertical)
     {
         Vector2 moveInput = new Vector2(
            horizontal,
@@ -94,7 +125,7 @@ public class EnemyMovementBehaviours : MonoBehaviour
             canShoot = false;
             projectilSpawn = transform;
 
-            // D�finit la rotationactuelle du joueur
+            // D�finit la rotationactuelle du joueur
             Quaternion rotation = transform.rotation;
 
             // Calculer les positions locales des projectiles (gauche et droite)
@@ -135,6 +166,79 @@ public class EnemyMovementBehaviours : MonoBehaviour
     public float getHealth()
     {
         return health;
+    }
+
+    private void HandleWaiting()
+    {
+        stateTimer += Time.deltaTime;
+        if (stateTimer > 3f) // Attendre 3 secondes
+        {
+            TransitionToState(State.Idle); // Passe à l'état Idle
+        }
+    }
+
+    private void HandleIdle()
+    {
+        directionChangeTimer += Time.deltaTime;
+
+        // Change de direction après un certain temps
+        if (directionChangeTimer >= changeDirectionTime)
+        {
+            // Change la direction aléatoirement
+            float randomAngle = Random.Range(0f, 360f); // Choisir un angle aléatoire entre 0 et 360
+            Moves(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+            Debug.Log("Changement !");
+            directionChangeTimer = 0f; // Réinitialiser le timer
+        }
+
+        // Si le joueur est détecté, on passe à l'état Chasing
+        Vector2 playerPosition = player.position; // Obtient la position du joueur via le script
+        if (Vector2.Distance(transform.position, playerPosition) < detectionRange)
+        {
+            TransitionToState(State.Chasing);
+        }
+    }
+
+    private void HandleChasing()
+    {
+        Vector2 playerPosition = player.position;
+        Vector2 direction = (playerPosition - (Vector2)transform.position).normalized;
+        Moves(direction.x, direction.y);
+
+        float distanceToPlayer = Vector2.Distance(transform.position, playerPosition);
+
+        if (distanceToPlayer < shootingRange)
+        {
+            TransitionToState(State.Shooting);
+        }
+        else if (distanceToPlayer > detectionRange)
+        {
+            TransitionToState(State.Idle); // Retourne à l'état Idle si le joueur est hors de portée
+        }
+    }
+
+    private void HandleShooting()
+    {
+        stateTimer += Time.deltaTime;
+
+        if (stateTimer > 1f) // Tire toutes les secondes
+        {
+            Shoot();
+            stateTimer = 0f; // Réinitialise le timer de tir
+        }
+
+        // Si le joueur s'éloigne
+        Vector2 playerPosition = player.position;
+        if (Vector2.Distance(transform.position, playerPosition) > shootingRange)
+        {
+            TransitionToState(State.Chasing);
+        }
+    }
+
+    private void TransitionToState(State newState)
+    {
+        currentState = newState;
+        stateTimer = 0f; // Réinitialise le timer à chaque transition
     }
 }
 
