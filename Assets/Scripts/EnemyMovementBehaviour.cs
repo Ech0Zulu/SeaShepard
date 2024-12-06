@@ -12,6 +12,15 @@ public class EnemyMovementBehaviours : MonoBehaviour
     private float health = 100f;
     private Vector2 movement;
 
+    private bool canShoot = true;
+    private float shootCD = 1.5f;
+    private float curShootCD = 0f;
+    private Transform projectilSpawn;
+    private float projectileSpeed = 15f;
+    private float projectileDamage = 20f;
+    [SerializeField]
+    private GameObject projectilePrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,14 +32,15 @@ public class EnemyMovementBehaviours : MonoBehaviour
     void Update()
     {
         IsTouchingWall();
-        Moves();  
+        Moves();
+        GetComponent<ShootBehaviour>().UpdateCD();
+        GetComponent<ShootBehaviour>().Shoot();
     }
 
     private void IsTouchingWall()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, rayRange, LayerMask.GetMask("Walls"));
         isTouchingWall = (hit.collider != null);
-        Debug.DrawRay(transform.position, transform.right * rayRange, isTouchingWall ? Color.red : Color.green);
     }   
 
     private void Moves()

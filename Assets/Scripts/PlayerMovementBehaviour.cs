@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovementBehaviours : MonoBehaviour
 {
-    [SerializeField]
-    private float rayRange = 0.3f;
+    private float rayRange = 2.3f;
     public bool isTouchingWall = false;
     private Rigidbody2D rb;
     private float speed = 10f;
@@ -28,7 +28,7 @@ public class PlayerMovementBehaviours : MonoBehaviour
 
     private void IsTouchingWall()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, rayRange, LayerMask.GetMask("Walls"));
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right , rayRange, LayerMask.GetMask("Walls"));
         isTouchingWall = (hit.collider != null);
         Debug.DrawRay(transform.position, transform.right * rayRange, isTouchingWall ? Color.red : Color.green);
     }   

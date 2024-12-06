@@ -9,9 +9,7 @@ public class ShootBehaviour : MonoBehaviour
     private float curShootCD = 0f;
     private Transform projectilSpawn;
     private float projectileSpeed = 15f;
-
-    [SerializeField]
-    private float projectileDamage = 10f;
+    private float projectileDamage = 20f;
 
     [SerializeField]
     private GameObject projectilePrefab;
@@ -29,9 +27,9 @@ public class ShootBehaviour : MonoBehaviour
         Shoot();
     }
 
-    private void Shoot()
+    public void Shoot()
     {
-        if (Input.GetMouseButtonDown(0) && canShoot)
+        if (Input.GetButtonDown("Jump") && canShoot)
         {
             canShoot = false;
             projectilSpawn = transform;
@@ -61,7 +59,7 @@ public class ShootBehaviour : MonoBehaviour
         }
     }
 
-    private void UpdateCD()
+    public void UpdateCD()
     {
         if (!canShoot)
         {
