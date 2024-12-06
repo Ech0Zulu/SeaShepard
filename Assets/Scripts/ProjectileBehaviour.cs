@@ -6,6 +6,7 @@ public class ProjectileBehaviour : MonoBehaviour
 {
     [SerializeField]
     private float lifeTime = 10f;
+    private float damage;
     
     // Start is called before the first frame update
     void Start()
@@ -20,8 +21,19 @@ public class ProjectileBehaviour : MonoBehaviour
         
     }
 
+    public void SetDamage(float damage)
+    {
+        this.damage = damage;
+    }
+
+    public float GetDamage()
+    {
+        return damage;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        
         // Détruire le projectile en cas de collision
         Destroy(gameObject);
     }
