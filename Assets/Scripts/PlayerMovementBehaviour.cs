@@ -66,6 +66,18 @@ public class PlayerMovementBehaviours : MonoBehaviour
         }
     }
 
+    public float GetHealth()
+    {
+        return health;
+
+    }
+
+    public float GetHealth()
+    {
+        return health;
+
+    }
+
     // Collision avec des projectiles
     private void OnCollisionEnter2D(Collision2D collision)
     {
