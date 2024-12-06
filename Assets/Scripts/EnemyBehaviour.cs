@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EnemyMovementBehaviours : MonoBehaviour
 {
-    [SerializeField]
-    private float rayRange = 0.3f;
+
+    private float rayRange = 2.3f;
     public bool isTouchingWall = false;
     private Rigidbody2D rb;
     private float speed = 10f;
