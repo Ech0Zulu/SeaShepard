@@ -11,6 +11,9 @@ public class ShootBehaviour : MonoBehaviour
     private float projectileSpeed = 15f;
 
     [SerializeField]
+    private float projectileDamage = 10f;
+
+    [SerializeField]
     private GameObject projectilePrefab;
 
     // Start is called before the first frame update
@@ -50,6 +53,7 @@ public class ShootBehaviour : MonoBehaviour
     {
         GameObject projectile = Instantiate(projectilePrefab, spawnPosition, transform.rotation);
         Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+        projectile.GetComponent<ProjectileBehaviour>().SetDamage(projectileDamage);
 
         if (rb != null)
         {
