@@ -308,7 +308,8 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: 1, y: 0.6}
-      - {x: 2, y: 0}
+      - {x: 2, y: 0.1}
+      - {x: 2, y: -0.1}
       - {x: 1, y: -0.6}
       - {x: -2, y: -0.6}
       - {x: -2, y: 0.6}
@@ -10536,7 +10537,6 @@ GameObject:
   - component: {fileID: 1754437740}
   - component: {fileID: 1754437742}
   - component: {fileID: 1754437745}
-  - component: {fileID: 1754437744}
   - component: {fileID: 1754437746}
   m_Layer: 0
   m_Name: Enemy
@@ -10620,7 +10620,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1754437739}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -10639,20 +10639,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1754437744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1754437739}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40cbccbba248d8a418313cb94762750f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rayRange: 0.3
-  isTouchingWall: 0
 --- !u!114 &1754437745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10667,6 +10653,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rayRange: 0.3
   isTouchingWall: 0
+  projectilePrefab: {fileID: 196592311234962240, guid: 67cae6c44757b684ebc71f67acb12ab7, type: 3}
 --- !u!60 &1754437746
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -10712,7 +10699,8 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: 1, y: 0.6}
-      - {x: 2, y: 0}
+      - {x: 2, y: 0.1}
+      - {x: 2, y: -0.1}
       - {x: 1, y: -0.6}
       - {x: -2, y: -0.6}
       - {x: -2, y: 0.6}
