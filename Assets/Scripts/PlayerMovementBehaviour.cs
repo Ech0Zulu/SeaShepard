@@ -64,6 +64,9 @@ public class PlayerMovementBehaviours : MonoBehaviour
         }
     }
 
+    public float GetHealth()
+    {
+        return health;
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Projectile"))
