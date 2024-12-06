@@ -65,5 +65,10 @@ public class MovementBehaviours : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public float GetHealth()
+    {
+        return health;
+    }
 }
 
