@@ -23,7 +23,7 @@ public class HUDManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        sliderPlayer.value = player.GetComponent<MovementBehaviours>().GetHealth();
+        sliderPlayer.value = player.GetComponent<PlayerMovementBehaviours>().GetHealth();
         //sliderEnemy.value = enemy.GetComponent<EnemmyBehaviours>().GetHealth();
     }
 }
